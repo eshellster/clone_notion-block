@@ -1,5 +1,5 @@
 import React from 'react';
-import EditablePage from './editablePage';
+import EditablePage from './EditablePage';
 
 function App() {
   return (
