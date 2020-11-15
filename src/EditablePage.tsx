@@ -37,11 +37,13 @@ const uid = () => {
     }
   
     addBlockHandler(currentBlock:any) {
-      const newBlock = { id: uid(), html: "", tag: "p" };
       const blocks = this.state.blocks;
       const index = blocks.map((b:any) => b.id).indexOf(currentBlock.id);
       const updatedBlocks = [...blocks];
-      updatedBlocks.splice(index + 1, 0, newBlock);
+      if(this.state.blocks.length === index+1){
+        const newBlock = { id: uid(), html: "", tag: "p" };
+        updatedBlocks.splice(index + 1, 0, newBlock);
+      }
       this.setState({ blocks: updatedBlocks }, () => {
         currentBlock.ref.nextElementSibling.focus();
       });
