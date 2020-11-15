@@ -18,9 +18,13 @@ class EditableBlock extends React.Component<EditableBlockProps,any> {
     super(props);
     this.onChangeHandler = this.onChangeHandler.bind(this);
     this.contentEditable = React.createRef();
+    this.onKeyDownHandler = this.onKeyDownHandler.bind(this);
+    this.contentEditable = React.createRef();
     this.state = {
+      htmlBackup: null,
       html: "",
       tag: "p",
+      previousKey: ""
     };
   }
 
@@ -44,15 +48,39 @@ class EditableBlock extends React.Component<EditableBlockProps,any> {
     this.setState({ html: e.target.value });
   }
 
+  onKeyDownHandler(e:any) {
+    if (e.key === "/") {
+      this.setState({ htmlBackup: this.state.html });
+    }
+    if (e.key === "Enter") {
+      if (this.state.previousKey !== "Shift") {
+        e.preventDefault();
+        this.props.addBlock({
+          id: this.props.id,
+          ref: this.contentEditable.current
+        });
+      }
+    }
+    if (e.key === "Backspace" && !this.state.html) {
+      e.preventDefault();
+      this.props.deleteBlock({
+        id: this.props.id,
+        ref: this.contentEditable.current
+      });
+    }
+    this.setState({ previousKey: e.key });
+  }
+
   render() {
     return (
-        <ContentEditable
-          className="Block"
-          innerRef={this.contentEditable}
-          html={this.state.html}
-          tagName={this.state.tag}
-          onChange={this.onChangeHandler}
-        />
+      <ContentEditable
+        className="Block"
+        innerRef={this.contentEditable}
+        html={this.state.html}
+        tagName={this.state.tag}
+        onChange={this.onChangeHandler}
+        onKeyDown={this.onKeyDownHandler}
+      />
     );
   }
 }
