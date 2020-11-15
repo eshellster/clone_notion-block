@@ -18,9 +18,16 @@ const uid = () => {
     }
   
     updatePageHandler(updatedBlock:any) {
+      console.log(this.state.blocks);
+      
       const blocks = this.state.blocks;
       const index = blocks.map((b:any) => b.id).indexOf(updatedBlock.id);
+      console.log("index",index,"this.state.blocks.length",this.state.blocks.length);
+      
       const updatedBlocks = [...blocks];
+      if(this.state.blocks.length === index+1){
+        updatedBlocks.splice(index + 1, 0,{ id: uid(), html: "", tag: "p" })
+      }
       updatedBlocks[index] = {
         ...updatedBlocks[index],
         tag: updatedBlock.tag,
@@ -77,64 +84,3 @@ const uid = () => {
   
   export default EditablePage;
 
-
-// const EditablePage = () => {
-
-//     const [state, setState] = useState( {blocks:[ { id: uid(), html: "", tag: "p" }]})
-
-//     const updatePageHandler = (updatedBlock:any) => {
-//         const blocks = state.blocks;
-//         const index = blocks.map((b) => b.id).indexOf(updatedBlock.id);
-//         const updatedBlocks = [...blocks];
-//         updatedBlocks[index] = {
-//           ...updatedBlocks[index],
-//           tag: updatedBlock.tag,
-//           html: updatedBlock.html
-//         };
-//         setState({ blocks: updatedBlocks });
-//       }
-//     const nextBlockFocus = (currentBlock:any) => currentBlock.ref.nextElementSibling.focus()
-//     const addBlockHandler = (currentBlock:any) => {
-//         const newBlock = { id: uid(), html: "", tag: "p" };
-//         const blocks = state.blocks;
-//         const index = blocks.map((b) => b.id).indexOf(currentBlock.id);
-//         const updatedBlocks = [...blocks];
-//         updatedBlocks.splice(index + 1, 0, newBlock);
-//         setState({ blocks: updatedBlocks })
-//         nextBlockFocus(currentBlock);
-//       }
-    
-      
-//     const deleteBlockHandler = (currentBlock:any) => {
-//         const previousBlock = currentBlock.ref.previousElementSibling;
-//         if (previousBlock) {
-//             const blocks = state.blocks;
-//             const index = blocks.map((b) => b.id).indexOf(currentBlock.id);
-//             const updatedBlocks = [...blocks];
-//             updatedBlocks.splice(index, 1);
-//             setState({ blocks: updatedBlocks });
-//             SetCaretToEnd(previousBlock);
-//             previousBlock.focus();
-//         }
-//       }
-//     return (
-//         <div className="Page">
-//         {state.blocks.map((block, key) => {
-//           return (
-//             <EditableBlock
-//               key={key}
-//               id={block.id}
-//               tag={block.tag}
-//               html={block.html}
-//               updatePage={updatePageHandler}
-//               addBlock={addBlockHandler}
-//               deleteBlock={deleteBlockHandler}
-//             />
-//           );
-//         })}
-//       </div>
-//     );
-  
-// }
-
-// export default EditablePage;
