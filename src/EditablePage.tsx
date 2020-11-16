@@ -18,11 +18,11 @@ const uid = () => {
     }
   
     updatePageHandler(updatedBlock:any) {
-      console.log(this.state.blocks);
+      // console.log(this.state.blocks);
       
       const blocks = this.state.blocks;
       const index = blocks.map((b:any) => b.id).indexOf(updatedBlock.id);
-      console.log("index",index,"this.state.blocks.length",this.state.blocks.length);
+      // console.log("index",index,"this.state.blocks.length",this.state.blocks.length);
       
       const updatedBlocks = [...blocks];
       if(this.state.blocks.length === index+1){

@@ -1,5 +1,8 @@
 import React,{RefObject}from 'react';
 import ContentEditable,{ContentEditableEvent} from 'react-contenteditable';
+import SelectMenu from './SelectMenu';
+import GetCaretCoordinates from './utils/GetCaretCoordinates';
+import SetCaretToEnd from './utils/SetCreateToEnd';
 
 interface EditableBlockProps {
     key:number
@@ -18,12 +21,21 @@ class EditableBlock extends React.Component<EditableBlockProps,any> {
     super(props);
     this.onChangeHandler = this.onChangeHandler.bind(this);
     this.onKeyDownHandler = this.onKeyDownHandler.bind(this);
+    this.onKeyUpHandler = this.onKeyUpHandler.bind(this);
+    this.openSelectMenuHandler = this.openSelectMenuHandler.bind(this);
+    this.closeSelectMenuHandler = this.closeSelectMenuHandler.bind(this);
+    this.tagSelectionHandler = this.tagSelectionHandler.bind(this);
     this.contentEditable = React.createRef();
     this.state = {
       htmlBackup: null,
       html: "",
       tag: "p",
-      previousKey: ""
+      previousKey: "",
+      selectMenuIsOpen: false,
+      selectMenuPosition: {
+        x: null,
+        y: null
+      }
     };
   }
 
@@ -70,16 +82,57 @@ class EditableBlock extends React.Component<EditableBlockProps,any> {
     this.setState({ previousKey: e.key });
   }
 
+  onKeyUpHandler(e:any) {
+    if (e.key === "/") {
+      this.openSelectMenuHandler();
+    }
+  }
+
+  openSelectMenuHandler() {
+    const { x, y } = GetCaretCoordinates();
+    this.setState({
+      selectMenuIsOpen: true,
+      selectMenuPosition: { x, y }
+    });
+    document.addEventListener("click", this.closeSelectMenuHandler);
+  }
+
+  closeSelectMenuHandler() {
+    this.setState({
+      htmlBackup: null,
+      selectMenuIsOpen: false,
+      selectMenuPosition: { x: null, y: null }
+    });
+    document.removeEventListener("click", this.closeSelectMenuHandler);
+  }
+
+  tagSelectionHandler(tag:any) {
+    this.setState({ tag: tag, html: this.state.htmlBackup }, () => {
+      SetCaretToEnd(this.contentEditable.current);
+      this.closeSelectMenuHandler();
+    });
+  }
+
   render() {
     return (
-      <ContentEditable
-        className="Block"
-        innerRef={this.contentEditable}
-        html={this.state.html}
-        tagName={this.state.tag}
-        onChange={this.onChangeHandler}
-        onKeyDown={this.onKeyDownHandler}
-      />
+      <>
+        {this.state.selectMenuIsOpen && (
+          <SelectMenu
+            position={this.state.selectMenuPosition}
+            onSelect={this.tagSelectionHandler}
+            close={this.closeSelectMenuHandler}
+          />
+        )}
+        <ContentEditable
+          className="Block"
+          innerRef={this.contentEditable}
+          html={this.state.html}
+          tagName={this.state.tag}
+          onChange={this.onChangeHandler}
+          onKeyDown={this.onKeyDownHandler}
+          onKeyUp={this.onKeyUpHandler}
+        />
+      </>
     );
   }
 }
