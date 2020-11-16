@@ -1,12 +1,12 @@
-import React from 'react';
-import EditablePage from './EditablePage';
+import React from "react";
+import EditablePage from "./EditablePage";
 
-function App() {
+const App = () => {
   return (
     <div className="App">
-     <EditablePage />
+      <EditablePage />
     </div>
   );
-}
+};
 
 export default App;
