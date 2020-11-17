@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Notice from "./components/notice";
 import EditableBlock from "./EditableBlock";
 import setCaretToEnd from "./utils/SetCreateToEnd";
 
@@ -30,16 +29,7 @@ const uid = () => {
 
 const initialBlock = { id: uid(), html: "", tag: "p" };
 
-const EditablePage = ({ id, fetchedBlocks, err }) => {
-  if (err) {
-    return (
-      <Notice status="ERROR">
-        <h3>Something went wrong 💔</h3>
-        <p>Have you tried to restart the app at '/' ?</p>
-      </Notice>
-    );
-  }
-  const [blocks, setBlocks] = useState(fetchedBlocks);
+const EditablePage = () => {
   const [state, setState] = useState({ blocks: [initialBlock] });
 
   const updatePageHandler = (updatedBlock: any) => {
