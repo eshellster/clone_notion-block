@@ -474,6 +474,15 @@ class EditableBlock extends React.Component<EditableBlockProps, any> {
 
 export default EditableBlock;
 
+const DraggableStyled = styled.div`
+  display: flex;
+  align-items: center;
+  .block {
+    display: inline-block;
+    width: calc(100% - 2rem);
+  }
+`;
+
 const Block = styled(ContentEditable)`
   padding: 0.25rem;
   // Better support for safari
@@ -484,15 +493,12 @@ const Block = styled(ContentEditable)`
     background-color: ${(props) => props.theme.uiColor.tertiary};
     outline-color: ${(props) => props.theme.uiColor.tertiary};
   }
+  &:hover {
+    background-color: #faf7f1;
+    outline-color: ${(props) => props.theme.uiColor.tertiary};
+  }
   &.placeholder {
     color: rgba(72, 72, 72, 0.25);
-  }
-`;
-
-const DraggableStyled = styled.div`
-  .block {
-    display: inline-block;
-    width: calc(100% - 2rem);
   }
 `;
 
@@ -529,5 +535,8 @@ const Image = styled.div`
   }
   &.blockSelected {
     opacity: 0.7;
+  }
+  &:hover {
+    background-color: #faf7f1;
   }
 `;

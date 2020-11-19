@@ -2,7 +2,6 @@ import { pid } from "process";
 import React from "react";
 import styled from "styled-components";
 import EditablePage from "./components/EditablePage";
-import DragDrop from "./DragDrop";
 
 const fetchedBlocks = [
   {
@@ -28,7 +27,6 @@ const App = () => {
   return (
     <LayoutRoot>
       <Content>
-        <DragDrop />
         <EditablePage id={pid} fetchedBlocks={fetchedBlocks} />
       </Content>
     </LayoutRoot>
