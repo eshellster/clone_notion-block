@@ -3,8 +3,8 @@ import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import EditableBlock from "./EditableBlock";
 import Notice from "./Notis";
 import { usePrevious } from "../hooks";
-import SetCaretToEnd from "../utils/SetCreateToEnd";
-import ObjectId from "../utils/ObjectId";
+import { SetCaretToEnd } from "../utils/SetCreateToEnd";
+import { ObjectId } from "../utils/ObjectId";
 
 // A page is represented by an array containing several blocks
 
@@ -179,7 +179,7 @@ const EditablePage = ({ id, fetchedBlocks, err }: EditablePageProps) => {
       </Notice>
 
       <DragDropContext onDragEnd={onDragEndHandler}>
-        <Droppable droppableId={String(id)}>
+        <Droppable droppableId="droppable">
           {(provided) => (
             <div ref={provided.innerRef} {...provided.droppableProps}>
               {blocks.map((block) => {

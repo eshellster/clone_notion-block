@@ -6,9 +6,6 @@ type ItemType = {
   content: string;
 };
 
-type StateType = {
-  items: ItemType[];
-};
 // fake data generator
 const getItems = (count: any) =>
   Array.from({ length: count }, (v, k) => k).map((k) => ({

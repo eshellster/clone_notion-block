@@ -1,4 +1,4 @@
-const GetCaretCoordinates = (fromStart = true) => {
+export const GetCaretCoordinates = (fromStart = true) => {
   let x, y;
   const isSupported = typeof window.getSelection !== "undefined";
   if (isSupported) {
@@ -17,5 +17,3 @@ const GetCaretCoordinates = (fromStart = true) => {
   }
   return { x, y };
 };
-
-export default GetCaretCoordinates;

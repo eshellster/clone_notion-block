@@ -1,15 +1,15 @@
 import React, { RefObject } from "react";
 import TagSelectorMenu from "./TagSelectorMenu";
 import ActionMenu from "./ActionMenu";
-import ContentEditable from "../styles/styleComponents/block/ContentEditable";
-import Image from "../styles/styleComponents/block/Image";
-import GetCaretCoordinates from "../utils/GetCaretCoordinates";
-import SetCaretToEnd from "../utils/SetCreateToEnd";
-import GetSelection from "../utils/GetSelection";
+import { GetCaretCoordinates } from "../utils/GetCaretCoordinates";
+import { SetCaretToEnd } from "../utils/SetCreateToEnd";
+import { GetSelection } from "../utils/GetSelection";
 import { DraggalbleIcon } from "../images/Icon";
-import DragHandle from "../styles/styleComponents/block/DragHandle";
+
 import { Draggable } from "react-beautiful-dnd";
-import DraggableItem from "../styles/styleComponents/block/DraggableItem";
+
+import styled from "styled-components";
+import ContentEditable from "react-contenteditable";
 
 const CMD_KEY = "/";
 
@@ -83,7 +83,6 @@ class EditableBlock extends React.Component<EditableBlockProps, any> {
   }
 
   componentDidMount() {
-    console.log("이미지 주소", "public/" + this.state.imageUrl);
     // Add a placeholder if the first block has no sibling elements and no content
     const hasPlaceholder = this.addPlaceholder({
       block: this.contentEditable.current,
@@ -211,6 +210,8 @@ class EditableBlock extends React.Component<EditableBlockProps, any> {
   }
 
   openActionMenu(parent: any, trigger: any) {
+    console.log("parent", parent);
+
     const x = this.calculateActionMenuPosition(parent, trigger)?.x;
     const y = this.calculateActionMenuPosition(parent, trigger)?.y;
     this.setState({
@@ -329,7 +330,7 @@ class EditableBlock extends React.Component<EditableBlockProps, any> {
   calculateActionMenuPosition(parent: any, initiator: any) {
     switch (initiator) {
       case "TEXT_SELECTION":
-        const { x: endX, y: endY } = GetCaretCoordinates(false); // fromEnd
+        const { x: endX } = GetCaretCoordinates(false); // fromEnd
         const { x: startX, y: startY } = GetCaretCoordinates(true); // fromStart
         if (endX && startX) {
           const middleX = startX + (endX - startX) / 2;
@@ -386,7 +387,7 @@ class EditableBlock extends React.Component<EditableBlockProps, any> {
         )}
         <Draggable draggableId={this.props.id} index={this.props.position}>
           {(provided, snapshot) => (
-            <DraggableItem
+            <DraggableStyled
               ref={provided.innerRef}
               className="draggable"
               {...provided.draggableProps}
@@ -394,14 +395,21 @@ class EditableBlock extends React.Component<EditableBlockProps, any> {
               <DragHandle
                 role="button"
                 tabIndex={0}
-                className="dragHandle"
+                className={[
+                  "dragHandle",
+                  this.state.isTyping ||
+                  this.state.actionMenuOpen ||
+                  this.state.tagSelectorMenuOpen
+                    ? "blockSelected"
+                    : null,
+                ].join(" ")}
                 onClick={this.handleDragHandleClick}
-                // {...provided.dragHandleProps}
+                {...provided.dragHandleProps}
               >
                 <DraggalbleIcon size={20} />
               </DragHandle>
               {this.state.tag !== "img" && (
-                <ContentEditable
+                <Block
                   innerRef={this.contentEditable}
                   data-position={this.props.position}
                   data-tag={this.state.tag}
@@ -451,12 +459,12 @@ class EditableBlock extends React.Component<EditableBlockProps, any> {
                         //http://localhost:3000/public/images/test.png
                         // process.env.NEXT_PUBLIC_API + "/" + this.state.imageUrl
                       }
-                      // alt={/[^\/]+(?=\.[^\/.]*$)/.exec(this.state.imageUrl)[0]}
+                      alt=""
                     />
                   )}
                 </Image>
               )}
-            </DraggableItem>
+            </DraggableStyled>
           )}
         </Draggable>
       </>
@@ -465,3 +473,61 @@ class EditableBlock extends React.Component<EditableBlockProps, any> {
 }
 
 export default EditableBlock;
+
+const Block = styled(ContentEditable)`
+  padding: 0.25rem;
+  // Better support for safari
+  -webkit-user-select: text;
+  user-select: text;
+
+  &.blockSelected {
+    background-color: ${(props) => props.theme.uiColor.tertiary};
+    outline-color: ${(props) => props.theme.uiColor.tertiary};
+  }
+  &.placeholder {
+    color: rgba(72, 72, 72, 0.25);
+  }
+`;
+
+const DraggableStyled = styled.div`
+  .block {
+    display: inline-block;
+    width: calc(100% - 2rem);
+  }
+`;
+
+const DragHandle = styled.span`
+  opacity: 0;
+  display: inline-block;
+  width: 1rem;
+
+  ${DraggableStyled}:hover & {
+    opacity: 1;
+  }
+  img {
+    display: block;
+    margin: auto;
+  }
+  &.blockSelected,
+  &:hover {
+    opacity: 1;
+  }
+`;
+
+const Image = styled.div`
+  display: inline-block;
+  width: calc(100% - 2rem);
+  padding: 0.25rem;
+  input {
+    display: none;
+  }
+  img {
+    display: block;
+    max-height: 600px;
+    max-width: 10%;
+    margin: 0 auto;
+  }
+  &.blockSelected {
+    opacity: 0.7;
+  }
+`;

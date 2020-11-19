@@ -1,7 +1,7 @@
 // Helper function to generate MongoDB-like ObjectIds
 // https://gist.github.com/solenoid/1372386
 
-const ObjectId = () => {
+export const ObjectId = () => {
   const timestamp = ((new Date().getTime() / 1000) | 0).toString(16);
   return (
     timestamp +
@@ -12,5 +12,3 @@ const ObjectId = () => {
       .toLowerCase()
   );
 };
-
-export default ObjectId;

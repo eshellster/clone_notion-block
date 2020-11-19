@@ -23,7 +23,7 @@ const theme: DefaultTheme = {
     lightPurple: "#A56778",
     warning: "#fc2a1c",
   },
-  maxWidth: "1280px",
+  maxWidth: "980px",
   boxBorder: "1px solid #e6e6e6",
   boxBorderWarning: "1px solid #FF5733",
   borderRadius: "4px",
@@ -49,6 +49,8 @@ const theme: DefaultTheme = {
     text-align: center;
     text-transform: uppercase;
     transition: all .2s ease-in-out;`,
+  boxShadow:
+    "rgba(15, 15, 15, 0.05) 0px 0px 0px 1px,rgba(15, 15, 15, 0.1) 0px 3px 6px, rgba(15, 15, 15, 0.2) 0px 9px 24px",
 };
 
 export { theme };

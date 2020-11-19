@@ -1,4 +1,4 @@
-const GetSelection = (element: HTMLElement) => {
+export const GetSelection = (element: HTMLElement) => {
   let selectionStart, selectionEnd;
   const isSupported = typeof window.getSelection !== "undefined";
   if (isSupported) {
@@ -13,5 +13,3 @@ const GetSelection = (element: HTMLElement) => {
   }
   return { selectionStart, selectionEnd };
 };
-
-export default GetSelection;

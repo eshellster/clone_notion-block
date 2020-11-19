@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { matchSorter } from "match-sorter";
+import styled from "styled-components";
 
 const MENU_HEIGHT = 150;
 const allowedTags = [
@@ -88,10 +89,10 @@ const TagSelectorMenu = ({
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [tagList, selectedTag]);
+  }, [tagList, selectedTag, handleSelection, closeMenu, command]);
 
   return (
-    <div
+    <MenuWraper
       className="menuWrapper"
       style={{
         top: y,
@@ -99,7 +100,7 @@ const TagSelectorMenu = ({
         justifyContent: !isMenuOutsideOfTopViewport ? "flex-end" : "flex-start",
       }}
     >
-      <div className="menu">
+      <Menu className="menu">
         {tagList.map((tag, key) => {
           return (
             <div
@@ -118,9 +119,24 @@ const TagSelectorMenu = ({
             </div>
           );
         })}
-      </div>
-    </div>
+      </Menu>
+    </MenuWraper>
   );
 };
 
 export default TagSelectorMenu;
+
+const MenuWraper = styled.div`
+  position: absolute;
+  width: 6.875rem;
+  height: 9rem;
+  z-index: 11;
+  display: flex;
+  flex-direction: column;
+`;
+
+const Menu = styled.div`
+  background: white;
+  box-shadow: ${(props) => props.theme.boxShadow};
+  border-radius: 0.5rem;
+`;

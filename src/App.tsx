@@ -1,5 +1,6 @@
 import { pid } from "process";
 import React from "react";
+import styled from "styled-components";
 import EditablePage from "./components/EditablePage";
 import DragDrop from "./DragDrop";
 
@@ -25,11 +26,28 @@ const fetchedBlocks = [
 ];
 const App = () => {
   return (
-    <>
-      <DragDrop />
-      <EditablePage id={pid} fetchedBlocks={fetchedBlocks} />
-    </>
+    <LayoutRoot>
+      <Content>
+        <DragDrop />
+        <EditablePage id={pid} fetchedBlocks={fetchedBlocks} />
+      </Content>
+    </LayoutRoot>
   );
 };
 
 export default App;
+
+const LayoutRoot = styled.div`
+  min-height: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  grid-template-columns: 100%;
+  justify-items: center;
+`;
+
+const Content = styled.div`
+  width: 100%;
+  max-width: ${(props) => props.theme.maxWidth};
+  padding: 1rem 0 1rem 1rem;
+  margin: 0;
+`;

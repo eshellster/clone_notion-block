@@ -26,8 +26,9 @@ declare module "styled-components" {
     boxBorder: string;
     boxBorderWarning: string;
     borderRadius: string;
-    whiteBox: any;
+    whiteBox: string;
     puzzTextWidht: string;
-    button: any;
+    button: string;
+    boxShadow: string;
   }
 }
